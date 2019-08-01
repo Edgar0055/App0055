@@ -1,8 +1,40 @@
 const Order = require('../models/Order')
 const errorHandler = require('../utils/errorHandler')
 
-module.exports.getAll = function(req, res) {
+module.exports.getAll = async function(req, res) {
+    const query = {
+        user: req.user.id
+    }
 
+    if (req.query.start) {
+        query.date = {
+            $gte: req.query.start // gte - greater or equal
+        }
+    }
+
+    if (req.query.end) {
+        if (!query.date) {
+            query.date = {}
+        }
+
+        query.date['$lte'] = req.query.end
+    }
+
+    if (req.query.order) {
+        req.order = +req.query.order
+    }
+
+    try {
+        const orders = await Order
+            .find(query)
+            .sort({ date: -1 })
+            .skip(+req.query.offset) // + привожу к формату числа (number)
+            .limit(+req.query.limit)
+
+        res.status(200).json(orders)
+    } catch (e) {
+        errorHandler(res, e)
+    }
 }
 
 module.exports.create = async function(req, res) {
