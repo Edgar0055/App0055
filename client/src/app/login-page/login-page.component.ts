@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
 import { Subscription } from 'rxjs';
+import { MaterialService } from '../shared/classes/material.service';
 
 
 @Component({
@@ -26,8 +27,10 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 
     this.route.queryParams.subscribe((params: Params) => {
       if(params['registered']) {
+        MaterialService.toast('You can use your input data for login')
         // You can use your input data for login
       } else if (params['accesDenied']) {
+        MaterialService.toast('For login you must be authorized')
         // For login you must be authorized
       }
     }) 
@@ -51,7 +54,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     this.aSub = this.auth.login(this.form.value).subscribe(
       () => this.router.navigate(['/overview']), // !!!!! дописать redirect !!!!
       error => {
-        console.warn(error)
+        MaterialService.toast(error.error.message)
         this.form.enable()
       } 
     )
