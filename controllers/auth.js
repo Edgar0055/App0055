@@ -40,12 +40,12 @@ module.exports.register = async function(req, res) {
             message: 'Busy email. Try else email.'
         })
     } else {
-        const salt = bcryptjs.genSaltSync(10) //хеш для пароля
+        const salt = bcrypt.genSaltSync(10) //хеш для пароля
         const password = req.body.password
 
         const user = new User({
             email: req.body.email,
-            password: bcryptjs.hashSync(password, salt)
+            password: bcrypt.hashSync(password, salt)
         })
 
         try {
