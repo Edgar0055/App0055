@@ -29,7 +29,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       if(params['registered']) {
         MaterialService.toast('You can use your input data for login')
         // You can use your input data for login
-      } else if (params['accesDenied']) {
+      } else if (params['accessDenied']) {
         MaterialService.toast('For login you must be authorized')
         // For login you must be authorized
       } else if (params['sessionFailed']) {
