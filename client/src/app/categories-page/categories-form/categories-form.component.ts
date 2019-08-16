@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CategoriesService } from 'src/app/shared/services/categories.service';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { MaterialService } from 'src/app/shared/classes/material.service';
 
 @Component({
   selector: 'app-categories-form',
@@ -21,14 +24,30 @@ export class CategoriesFormComponent implements OnInit {
       name: new FormControl(null, Validators.required)
     })
 
+    this.form.disable();
 
-    // this.route.params.subscribe((params: Params) => {
-    //   if (params['id']) {
-    //     this.isNew = false;
-    //   }
-    // })
+    this.route.params.pipe(switchMap(
+      (params: Params) => {
+        if (params['id']) {
+          this.isNew = false;
+          return this.categoriesService.getById(params['id']);
+        }
 
-    
+        return of(null);
+      }
+    ))
+    .subscribe(
+      category => {
+        if (category) {
+          this.form.patchValue({
+            name: category.name
+          })
+          MaterialService.updateTextInputs();
+        }
+        this.form.enable();
+      },
+      error => MaterialService.toast(error.error.message)
+    )
   }
 
   onSubmit() {
