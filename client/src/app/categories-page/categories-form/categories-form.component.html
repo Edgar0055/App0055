@@ -29,7 +29,10 @@
         </div>
 
         <div>
-            <button class="waves-effect waves-light btn orange lighten-2 mb2" type="button">
+            <input type="file" class="dn" #input (change)="onFileUpload($event)">
+            <button (click)="triggerClick()" 
+            class="waves-effect waves-light btn orange lighten-2 mb2" 
+            type="button" [disabled]="form.disabled">
                 <i class="material-icons left">backup</i>
                 Загрузить изображение
             </button>

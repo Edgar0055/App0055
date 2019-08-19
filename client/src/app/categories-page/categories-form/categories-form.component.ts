@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CategoriesService } from 'src/app/shared/services/categories.service';
@@ -12,6 +12,8 @@ import { MaterialService } from 'src/app/shared/classes/material.service';
   styleUrls: ['./categories-form.component.scss']
 })
 export class CategoriesFormComponent implements OnInit {
+
+  @ViewChild('input', null) inputRef: ElementRef;
 
   form: FormGroup;
 
@@ -48,6 +50,14 @@ export class CategoriesFormComponent implements OnInit {
       },
       error => MaterialService.toast(error.error.message)
     )
+  }
+
+  triggerClick() {
+    this.inputRef.nativeElement.click();
+  }
+
+  onFileUpload(event: Event) {
+    
   }
 
   onSubmit() {
