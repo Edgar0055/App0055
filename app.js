@@ -33,8 +33,8 @@ app.use('/api/category', categoryRoutes)
 app.use('/api/order', orderRoutes)
 app.use('/api/position', positionRoutes)
 
-if(proccess.env.NODE_ENV === 'production') {
-    app.use(express.static('client/dist/client'));
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/dist/client'))
 
     app.get('*', (req, res) => {
         res.sendFile(
